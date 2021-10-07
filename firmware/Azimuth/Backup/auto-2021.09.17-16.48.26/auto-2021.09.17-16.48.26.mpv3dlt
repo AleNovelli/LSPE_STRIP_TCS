@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MotionPerfectLayout>
+  <Contents>
+    <Content Name="document_ee0fd2d7af0a4bd39368dffe0926bf82">
+      <Program Name="MAIN" Process="-1" />
+    </Content>
+    <Content Name="document_b063a3837f554b00827937120d88b6fe">
+      <Program Name="COMMON" Process="-1" />
+    </Content>
+    <Content Name="document_c66e07dc70224ae4b17931ab2c06b3f2">
+      <Program Name="SETUP" Process="-1" />
+    </Content>
+    <Content Name="document_8c35c82ca77546e8af15cbd6b072e449">
+      <Program Name="AAA" Process="-1" />
+    </Content>
+  </Contents>
+  <LayoutRoot>
+    <RootPanel Orientation="Horizontal">
+      <LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="260">
+        <LayoutAnchorablePane Id="9fdd3395-3c71-4266-b0ed-c3f1a9157d75" DockWidth="260" DockHeight="1.11714067778141*" FloatingWidth="300" FloatingHeight="300" FloatingLeft="NaN" FloatingTop="NaN">
+          <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Controller" IsSelected="True" ContentId="tool_ControllerTreeControl" LastActivationTimeStamp="09/17/2021 16:28:23" />
+        </LayoutAnchorablePane>
+        <LayoutAnchorablePane DockHeight="0.882775119617225*" FloatingWidth="200" FloatingHeight="600" FloatingLeft="25.6" FloatingTop="463.2">
+          <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Table Viewer" IsSelected="True" ContentId="tool_TableViewerControl" FloatingLeft="25.6" FloatingTop="463.2" FloatingWidth="200" FloatingHeight="600" LastActivationTimeStamp="09/17/2021 15:38:17" PreviousContainerId="9fdd3395-3c71-4266-b0ed-c3f1a9157d75" PreviousContainerIndex="1" />
+        </LayoutAnchorablePane>
+      </LayoutAnchorablePaneGroup>
+      <LayoutPanel Orientation="Vertical" DockWidth="1.31701059499866*">
+        <LayoutDocumentPaneGroup Orientation="Horizontal" DockHeight="0.981549815498157*">
+          <LayoutDocumentPane Id="5fdd0ed5-e53a-4eb9-b937-201213378bb7">
+            <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Oscilloscope" ContentId="tool_OscilloscopeControl" FloatingLeft="277.6" FloatingTop="276.8" FloatingWidth="800" FloatingHeight="589.6" LastActivationTimeStamp="09/17/2021 16:19:23" PreviousContainerId="5fdd0ed5-e53a-4eb9-b937-201213378bb7" PreviousContainerIndex="0" />
+            <LayoutDocument Title="MAIN" IsSelected="True" IsLastFocusedDocument="True" ContentId="document_ee0fd2d7af0a4bd39368dffe0926bf82" LastActivationTimeStamp="09/17/2021 16:43:42" />
+            <LayoutDocument Title="COMMON" ContentId="document_b063a3837f554b00827937120d88b6fe" LastActivationTimeStamp="09/17/2021 16:20:41" />
+            <LayoutDocument Title="SETUP" ContentId="document_c66e07dc70224ae4b17931ab2c06b3f2" LastActivationTimeStamp="09/17/2021 16:02:20" />
+            <LayoutDocument Title="AAA" ContentId="document_8c35c82ca77546e8af15cbd6b072e449" LastActivationTimeStamp="09/17/2021 16:10:29" />
+          </LayoutDocumentPane>
+        </LayoutDocumentPaneGroup>
+        <LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="242.4" FloatingWidth="460" FloatingHeight="260" FloatingLeft="552" FloatingTop="493.6">
+          <LayoutAnchorablePane DockWidth="1.23346303501946*" DockHeight="242.4" FloatingWidth="460" FloatingHeight="260" FloatingLeft="552" FloatingTop="493.6">
+            <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Digital I/O Status (Inputs: 0-15,  I/O: 8-15)" IsSelected="True" ContentId="tool_DigitalIOControl" FloatingLeft="552" FloatingTop="493.6" FloatingWidth="460" FloatingHeight="260" LastActivationTimeStamp="09/17/2021 16:16:32" PreviousContainerId="9fdd3395-3c71-4266-b0ed-c3f1a9157d75" PreviousContainerIndex="1" />
+          </LayoutAnchorablePane>
+          <LayoutAnchorablePane DockWidth="0.766990291262136*" DockHeight="1.11714067778141*" FloatingWidth="355.2" FloatingHeight="300" FloatingLeft="552.8" FloatingTop="644.8">
+            <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Axis Parameters" IsSelected="True" ContentId="tool_AxisParametersControl" FloatingLeft="552.8" FloatingTop="644.8" FloatingWidth="355.2" FloatingHeight="300" LastActivationTimeStamp="08/23/2021 13:31:46" PreviousContainerId="9fdd3395-3c71-4266-b0ed-c3f1a9157d75" PreviousContainerIndex="1" />
+          </LayoutAnchorablePane>
+        </LayoutAnchorablePaneGroup>
+        <LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="300">
+          <LayoutAnchorablePane Id="852199a9-b614-47f0-8ec0-145b384edfae" DockHeight="300" />
+        </LayoutAnchorablePaneGroup>
+      </LayoutPanel>
+      <LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="413.6">
+        <LayoutAnchorablePane DockWidth="413.6" DockHeight="1.11714067778141*" FloatingWidth="200" FloatingHeight="600" FloatingLeft="1281.6" FloatingTop="370.4">
+          <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="VR Viewer" IsSelected="True" ContentId="tool_VRViewerControl" FloatingLeft="1281.6" FloatingTop="370.4" FloatingWidth="200" FloatingHeight="600" LastActivationTimeStamp="09/17/2021 16:01:34" PreviousContainerId="9fdd3395-3c71-4266-b0ed-c3f1a9157d75" PreviousContainerIndex="1" />
+        </LayoutAnchorablePane>
+        <LayoutAnchorablePane DockWidth="300">
+          <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Channel #5" ContentId="tool_TerminalControl_5" FloatingLeft="1372" FloatingTop="420.8" FloatingWidth="310.4" FloatingHeight="344.8" LastActivationTimeStamp="09/17/2021 16:08:19" />
+          <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Channel #0" IsSelected="True" ContentId="tool_TerminalControl_0" LastActivationTimeStamp="09/17/2021 16:28:27" />
+        </LayoutAnchorablePane>
+      </LayoutAnchorablePaneGroup>
+    </RootPanel>
+    <TopSide />
+    <RightSide />
+    <LeftSide />
+    <BottomSide>
+      <LayoutAnchorGroup PreviousContainerId="852199a9-b614-47f0-8ec0-145b384edfae">
+        <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Compile/Check Results" ContentId="tool_CompileCheckControl" />
+      </LayoutAnchorGroup>
+    </BottomSide>
+    <FloatingWindows>
+      <LayoutAnchorableFloatingWindow>
+        <LayoutAnchorablePaneGroup Orientation="Horizontal" FloatingWidth="25" FloatingHeight="27.2" FloatingLeft="708" FloatingTop="48">
+          <LayoutAnchorablePane Id="448b1dff-719d-4a82-af83-fc236035d61b" DockHeight="1.11714067778141*" FloatingWidth="25" FloatingHeight="27.2" FloatingLeft="708" FloatingTop="48" />
+        </LayoutAnchorablePaneGroup>
+      </LayoutAnchorableFloatingWindow>
+    </FloatingWindows>
+    <Hidden>
+      <LayoutAnchorable AutoHideMinWidth="100" AutoHideMinHeight="100" Title="Find and Replace" IsSelected="True" ContentId="tool_FindReplaceWindow" FloatingLeft="708" FloatingTop="48" FloatingWidth="233.6" FloatingHeight="327.2" LastActivationTimeStamp="09/17/2021 16:45:50" PreviousContainerId="448b1dff-719d-4a82-af83-fc236035d61b" PreviousContainerIndex="0" />
+    </Hidden>
+  </LayoutRoot>
+</MotionPerfectLayout>

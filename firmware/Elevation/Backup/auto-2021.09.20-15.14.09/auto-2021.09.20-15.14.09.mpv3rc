@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Contents>
+  <Content Name="Project">
+    <Project>
+      <Items>
+        <Item Type="basic" Name="COMMON" />
+        <Item Type="basic" Name="MAIN" />
+        <Item Type="basic" Name="SETUP" />
+        <Item Type="basic" Name="MONITOR" />
+        <Item Type="basic" Name="ENCODER_UPDATE" />
+      </Items>
+    </Project>
+  </Content>
+  <Content Name="Controller">
+    <Controller>
+      <PropertyRepository>
+        <Item id="DigitalIO">
+          <Property Name="Visibility_0_BiDirectional" Value="True" />
+          <Property Name="Visibility_1_BiDirectional" Value="True" />
+        </Item>
+      </PropertyRepository>
+    </Controller>
+  </Content>
+</Contents>
