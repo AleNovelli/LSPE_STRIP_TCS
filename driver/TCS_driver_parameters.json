@@ -21,22 +21,24 @@
     "elongation": 7
   },
   "move_to_start": {
-    "alt": 70,
-    "az": 120,
+    "alt": 50,
+    "az": 10,
     "elongation_from_sun": 9,
     "address": 0
   },
   "nominal_survey": {
     "alt": 20,
+    "start_time": 1633878738.4,
     "speed": 15,
     "duration": 10
   },
   "raster_scan": {
     "alt": 10,
+    "start_time": 5,
     "duration": 10,
     "speed": 10,
     "accel_to_decel_frac": 2,
-    "az_min": 10,
+    "az_min": 15,
     "az_max": 20
   }
 }

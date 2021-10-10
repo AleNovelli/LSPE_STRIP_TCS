@@ -27,7 +27,7 @@ REPEAT
             WAIT UNTIL VR(motion_command)<>disable_all
             GOSUB clear_commands
 
-        ELSEIF VR(motion_command)=usr_nominal_survey AND VR(home_status)=home_complete THEN
+        ELSEIF VR(motion_command)=usr_nominal_survey THEN
             'Run main machine sequence
             VR(system_status)=running
             GOSUB nominal_survey:
@@ -44,17 +44,33 @@ REPEAT
 
         ELSEIF VR(motion_command)=usr_raster_scan THEN
             'Run raster scan sequence
+            VR(system_status)=usr_raster_scan
             GOSUB raster_scan
+            VR(system_status)=ready
+            GOSUB clear_commands
+            'VR(motion_command)=disable_all
+
+        ELSEIF VR(motion_command)=usr_calibration_old AND FALSE THEN
+            'Run raster scan sequence
+            GOSUB calibration
             VR(system_status)=ready
             GOSUB clear_commands
             'VR(motion_command)=disable_all
 
         ELSEIF VR(motion_command)=usr_calibration THEN
             'Run raster scan sequence
-            GOSUB calibration
+            VR(system_status)=calibrating
+            VR(current_pos)=-1
+            FOR point=0 TO VR(num_of_points)-1:
+                WAIT UNTIL VR(next_point_ready)=1
+                VR(next_point_ready)=0
+                GOSUB move_avoid_sun
+                VR (current_point)=point
+                PRINT "Waiting camera"
+            NEXT point
             VR(system_status)=ready
             GOSUB clear_commands
-            'VR(motion_command)=disable_all
+
 
         ELSEIF VR(motion_command)=usr_move_avoid_sun THEN
             'Move avoiding the sun scan sequence
@@ -209,6 +225,42 @@ PRINT#5,"Moving to starting position"
 GOSUB speed_setup
 BASE(ax0)
 TRIGGER
+
+FOR pos=1 TO VR(jog_traj_lenght)-1: 'cicling over the positions of the trajectory
+    'if the step of the trajectory changes Az and not Alt wait for Az motor to be idle
+    IF VR(jog_traj+pos)=VR(jog_traj+pos-1) THEN
+        PRINT #5, "Wait"
+        PRINT #5, VR(jog_traj+pos-1), "--->", VR(jog_traj+pos)
+        WA(20)
+        WAIT UNTIL IN(in_user_azimuth_idle)
+        OP(in_user_azimuth_idle, OFF)
+    ELSE 'if instead the step of the trajectory changes Alt
+        PRINT #5, "Run"
+        PRINT #5, VR(jog_traj+pos-1), "--->", VR(jog_traj+pos)
+        'OP(io_user_elevation_idle, OFF) 'switch off idle imput
+        WAIT UNTIL IN(io_user_elevation_idle)=OFF
+
+        MOVEABS( VR(jog_traj+pos) ) 'move the motor in position
+        WAIT IDLE 'wait end of motion
+        OP(io_user_elevation_idle, ON) 'signal that the motor is idle to workstation and Az TrioController
+    ENDIF
+NEXT pos
+
+TRIGGER
+
+PRINT#5,"Telescope in starting position"
+RETURN
+
+
+'-------------------------------------------------------------------------------
+'Move to start OLD
+'-------------------------------------------------------------------------------
+move_avoid_sun_old:
+PRINT#5,"Moving to starting position"
+'Setup axis speeds
+GOSUB speed_setup
+BASE(ax0)
+TRIGGER
 FOR pos=1 TO VR(avoid_sun_len_table)-1: 'cicling over the positions of the trajectory
     'if the step of the trajectory changes Az and not Alt wait for Az motor to be idle
     IF TABLE(VR(avoid_sun_alt_table_start)+pos)=TABLE(VR(avoid_sun_alt_table_start)+pos-1) THEN
@@ -233,7 +285,6 @@ TRIGGER
 
 PRINT#5,"Telescope in starting position"
 RETURN
-
 
 '-------------------------------------------------------------------------------
 'Programming Errors are trapped here.

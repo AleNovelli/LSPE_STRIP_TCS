@@ -240,6 +240,7 @@ def Enable_Motion(controller, alt_az, status, timeout):
                 time.sleep(.1)#waiting for the controllers to register the command changed from disable all
             Write_32_bit_floats(controller, azdef.motion_command, azdef.enable_all)
 
+
         # Waiting for the Trio-Controller to be enabled and ready for a motion command
         Wait_until_register(controller, azdef.system_status, azdef.ready, timeout)
 
@@ -341,13 +342,13 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
 
     if traj_az_in_sun and traj_alt_in_sun:  # if telescope is close to the sun program a move to move it away
         print(1)
-        traj = move(traj, np.sign((traj[-1].az - sun.az).wrap_at("180d")) * (
+        traj = move(traj, 1.2*np.sign((traj[-1].az - sun.az).wrap_at("180d")) * (
                     hor_rad - abs((traj[-1].az - sun.az).wrap_at("180d"))), Angle(0, unit="deg"))
         traj_az_in_sun = False  # I moved the telescope outside the sun Az range
 
     if obj_az_in_sun and obj_alt_in_sun:  # if final pos is close to the sun program a move to get close safely
         print(2)
-        obj = move(obj, np.sign((obj[0].az - sun.az).wrap_at("180d")) * (
+        obj = move(obj, 1.2*np.sign((obj[0].az - sun.az).wrap_at("180d")) * (
                     hor_rad - abs((obj[0].az - sun.az).wrap_at("180d"))), Angle(0, unit="deg"), reverse=True)
         obj_az_in_sun = False  # I moved the objective outside the sun Az range
 
@@ -359,8 +360,10 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
 
     if not sun_in_the_way:
         print(3)  # if the sun is not in the way move straight to the objective
-        traj = moveabs(traj, obj[0].az, traj[-1].alt)
-        traj = moveabs(traj, traj[-1].az, obj[0].alt)
+        if traj[-1].az != obj[0].az:
+            traj = moveabs(traj, obj[0].az, traj[-1].alt)
+        if traj[-1].alt != obj[0].alt:
+            traj = moveabs(traj, traj[-1].az, obj[0].alt)
     elif traj_az_in_sun and obj_az_in_sun:
         if abs((traj[-1].az - obj[0].az) / 2 + obj[0].az - sun_az_min) >= abs(
                 (traj[-1].az - obj[0].az) / 2 + obj[0].az - sun_az_max):
@@ -405,3 +408,4 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
     az_traj = full_traj.az.deg.tolist()  # converting the trajectory from numpy strings to list of floats
     alt_traj = full_traj.alt.deg.tolist()
     return az_traj, alt_traj
+

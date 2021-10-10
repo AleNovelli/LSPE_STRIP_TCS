@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Contents>
+  <Content Name="Project">
+    <Project>
+      <Items>
+        <Item Type="basic" Name="COMMON" />
+        <Item Type="basic" Name="ENCODER_UPDATE" />
+        <Item Type="basic" Name="MAIN" />
+        <Item Type="basic" Name="MONITOR" />
+        <Item Type="basic" Name="SETUP" />
+      </Items>
+    </Project>
+  </Content>
+  <Content Name="Controller">
+    <Controller>
+      <DigitalLines>
+        <Line Index="0" Direction="BiDirectional" Name="in_estop_healthy" />
+        <Line Index="1" Direction="BiDirectional" Name="in_start_button" />
+        <Line Index="2" Direction="BiDirectional" Name="in_stop_button" />
+        <Line Index="3" Direction="BiDirectional" Name="in_user_tos" />
+        <Line Index="4" Direction="BiDirectional" Name="in_user_elevation_idle" />
+        <Line Index="8" Direction="BiDirectional" Name="out_fault_lamp" />
+        <Line Index="9" Direction="BiDirectional" Name="io_user_modbus_table" />
+        <Line Index="10" Direction="BiDirectional" Name="io_user_azimuth_idle" />
+        <Line Index="14" Direction="BiDirectional" Name="out_relay_0" />
+        <Line Index="15" Direction="BiDirectional" Name="out_relay_1" />
+      </DigitalLines>
+      <PropertyRepository>
+        <Item id="DigitalIO">
+          <Property Name="Visibility_0_BiDirectional" Value="True" />
+          <Property Name="Visibility_1_BiDirectional" Value="True" />
+        </Item>
+        <Item id="VR0">
+          <Property Name="Description" Value="software_version" />
+        </Item>
+        <Item id="VR1">
+          <Property Name="Description" Value="firmware_version" />
+        </Item>
+        <Item id="VR2">
+          <Property Name="Description" Value="err_proc_no" />
+        </Item>
+        <Item id="VR3">
+          <Property Name="Description" Value="err_line_no" />
+        </Item>
+        <Item id="VR4">
+          <Property Name="Description" Value="err_code_no" />
+        </Item>
+        <Item id="VR5">
+          <Property Name="Description" Value="default_vr" />
+        </Item>
+        <Item id="VR6">
+          <Property Name="Description" Value="mask_basic_err" />
+        </Item>
+        <Item id="VR7">
+          <Property Name="Description" Value="mask_limits" />
+        </Item>
+        <Item id="VR8">
+          <Property Name="Description" Value="basic_err_fault" />
+        </Item>
+        <Item id="VR9">
+          <Property Name="Description" Value="ethercat_state" />
+        </Item>
+        <Item id="VR10">
+          <Property Name="Description" Value="system_status" />
+        </Item>
+        <Item id="VR11">
+          <Property Name="Description" Value="fault_status" />
+        </Item>
+        <Item id="VR12">
+          <Property Name="Description" Value="fault_latch" />
+        </Item>
+        <Item id="VR13">
+          <Property Name="Description" Value="home_status" />
+        </Item>
+        <Item id="VR14">
+          <Property Name="Description" Value="system_warning" />
+        </Item>
+        <Item id="VR15">
+          <Property Name="Description" Value="i_o_status_0_31" />
+        </Item>
+        <Item id="VR16">
+          <Property Name="Description" Value="i_o_status_32_63" />
+        </Item>
+        <Item id="VR20">
+          <Property Name="Description" Value="motion_command" />
+        </Item>
+        <Item id="VR21">
+          <Property Name="Description" Value="motion_axis" />
+        </Item>
+        <Item id="VR22">
+          <Property Name="Description" Value="fault_acknowledge" />
+        </Item>
+        <Item id="VR30">
+          <Property Name="Description" Value="master_time_from_MC" />
+        </Item>
+        <Item id="VR31">
+          <Property Name="Description" Value="master_time_to_WS" />
+        </Item>
+        <Item id="VR32">
+          <Property Name="Description" Value="ticks_write" />
+        </Item>
+        <Item id="VR40">
+          <Property Name="Description" Value="nominal_survey_alt" />
+        </Item>
+        <Item id="VR41">
+          <Property Name="Description" Value="nominal_survey_speed" />
+        </Item>
+        <Item id="VR42">
+          <Property Name="Description" Value="nominal_survey_duration" />
+        </Item>
+        <Item id="VR50">
+          <Property Name="Description" Value="raster_scan_alt" />
+        </Item>
+        <Item id="VR51">
+          <Property Name="Description" Value="raster_scan_az_min" />
+        </Item>
+        <Item id="VR52">
+          <Property Name="Description" Value="raster_scan_az_max" />
+        </Item>
+        <Item id="VR53">
+          <Property Name="Description" Value="raster_scan_duration" />
+        </Item>
+        <Item id="VR54">
+          <Property Name="Description" Value="raster_scan_speed" />
+        </Item>
+        <Item id="VR60">
+          <Property Name="Description" Value="drone_table_start" />
+        </Item>
+        <Item id="VR61">
+          <Property Name="Description" Value="drone_table_lenght" />
+        </Item>
+        <Item id="VR62">
+          <Property Name="Description" Value="drone_target_pos" />
+        </Item>
+        <Item id="VR70">
+          <Property Name="Description" Value="traj_alt_start" />
+        </Item>
+        <Item id="VR71">
+          <Property Name="Description" Value="traj_az_start" />
+        </Item>
+        <Item id="VR72">
+          <Property Name="Description" Value="traj_lenght" />
+        </Item>
+        <Item id="VR55">
+          <Property Name="Description" Value="raster_scan_accel_to_decel_frac" />
+        </Item>
+        <Item id="VR33">
+          <Property Name="Description" Value="ax0_mpos" />
+        </Item>
+      </PropertyRepository>
+    </Controller>
+  </Content>
+</Contents>

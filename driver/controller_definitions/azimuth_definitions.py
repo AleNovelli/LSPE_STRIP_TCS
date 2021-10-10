@@ -75,7 +75,7 @@ aout_1_value=27 #indicates a value to be transmitted to the DAC (do we need it??
 master_time_from_mc=30 #where the time from the master clock is stored
 master_time_to_ws=31 #where the workstation reads the time from
 ticks_write=32 #where we store the ticks parameter so that the client can track the position of the motors
-ax0_mpos=33 #where we store the mpos parameter so that the client can track the position of the motors
+ax_mpos=33 #where we store the mpos parameter so that the client can track the position of the motors
 
 #locations on table where to read the main sequence list from the client (elevation & spin_speed & spin_duration)
 nominal_survey_alt=40 #where on table memory the client writes the list of the elevations for the main sequence
@@ -91,14 +91,22 @@ raster_scan_speed=54
 raster_scan_accel_to_decel_frac=55
 
 #Calibration parameters VR memory locations
-calibration_table_start=60
-calibration_table_lenght=61
-calibration_target_pos=62
+#calibration_table_start=60
+#calibration_table_lenght=61
+#calibration_target_pos=62
+num_of_points=60 #number of points in the calibration list
+current_point=61 #point which we are currently observing
+next_point_ready=62
+
 
 #Avoid Sun motion VR memory locations
-avoid_sun_alt_table_start=70
-avoid_sun_az_table_start=71
-avoid_sun_len_table=72
+#avoid_sun_alt_table_start=70
+#avoid_sun_az_table_start=71
+#avoid_sun_len_table=72
+jog_traj_lenght=70
+jog_traj=71#WARNING!!! VR addresses from 71 to 79 will be used to store the trajectory to jog avoiding the sun, DO NOT
+#USE!
+
 
 #Axis 0 parameters
 ax0_limit_config=101

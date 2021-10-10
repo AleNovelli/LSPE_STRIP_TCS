@@ -54,6 +54,27 @@ modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False) #preparing modbu
 modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False) #preparing modbus connection to Elevation Controller
 
 try:
+    # getting the position of the sun
+    # observing location in Tenerife
+    observing_location = EarthLocation(lat=telescope_lat, lon=telescope_lon, height=telescope_height * u.m)
+    Location_Time = AltAz(location=observing_location, obstime=Time(datetime.now()))  # adding current time
+    sun = get_sun(Time(datetime.now())).transform_to(Location_Time)  # getting the position of the sun
+    sun.az.wrap_at("180d", inplace=True)  # defining Az coordinate to be kept between (-180deg and 180deg)
+
+    # UTILIZZATO PER I TEST, DA ELIMINARE DOPO
+    sun = np.array([[89, 35]])
+    sun = SkyCoord(sun, unit="degree", frame='altaz')
+    sun.az.wrap_at("180d", inplace=True)
+
+    finish = np.array([[az, alt]])
+    finish = SkyCoord(finish, unit="degree", frame='altaz')
+    finish.az.wrap_at("180d", inplace=True)
+
+    if sun.separation(finish) < elongation:
+        raise Exception("CRITICAL ERROR:\n" +
+                        "You are attempting to move the telescope too close to the sun!\n" +
+                        "JOG ABORTED!")
+
     # connecting to the two controllers
     lb.Connect_to_Controller(modbus_az, "Azimuth")
     lb.Connect_to_Controller(modbus_alt, "Elevation")
@@ -61,18 +82,6 @@ try:
     # control if the system can be used for motion
     az_status = lb.Test_Controller_Available(modbus_az, "az")
     alt_status = lb.Test_Controller_Available(modbus_alt, "alt")
-
-    #getting the position of the sun
-    # observing location in Tenerife
-    observing_location = EarthLocation(lat=telescope_lat, lon=telescope_lon, height=telescope_height*u.m)
-    Location_Time = AltAz(location=observing_location, obstime=Time(datetime.now())) #adding current time
-    sun = get_sun(Time(datetime.now())).transform_to(Location_Time) #getting the position of the sun
-    sun.az.wrap_at("180d", inplace=True) #defining Az coordinate to be kept between (-180deg and 180deg)
-
-    #UTILIZZATO PER I TEST, DA ELIMINARE DOPO
-    sun=np.array([[1,35]])
-    sun = SkyCoord(sun, unit="degree", frame='altaz')
-    sun.az.wrap_at("180d", inplace=True)
 
     #getting the position of the telescope and the position to be reached
     az_encoder_pos=lb.Read_32_bit_floats(modbus_az, azdef.ax0_mpos)
@@ -84,67 +93,53 @@ try:
     start = SkyCoord(start, unit="degree", frame='altaz')
     start.az.wrap_at("180d", inplace=True)
 
-    finish=np.array([[az,alt]])
-    finish=SkyCoord(finish, unit="degree", frame='altaz')
-    finish.az.wrap_at("180d", inplace=True)
-
     az_traj, alt_traj = lb.Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min)
 
     traj_lenght = len(az_traj)  # saving the lenght of the trajectory (they have the same len so i take len of az_traj)
-    addr_az = addr_alt + traj_lenght  # storing table of azimuth right after elevations
-    lb.Write_32_bit_floats(modbus_az, azdef.avoid_sun_az_table_start, addr_az)
-    lb.Write_32_bit_floats(modbus_az, azdef.avoid_sun_alt_table_start, addr_alt)
-    lb.Write_32_bit_floats(modbus_az, azdef.avoid_sun_len_table, traj_lenght)# writing how long the parameters lists are
 
-    lb.Write_32_bit_floats(modbus_alt, altdef.avoid_sun_az_table_start, addr_az)
-    lb.Write_32_bit_floats(modbus_alt, altdef.avoid_sun_alt_table_start, addr_alt)
-    lb.Write_32_bit_floats(modbus_alt, altdef.avoid_sun_len_table,
-                           traj_lenght)  # writing how long the parameters lists are
+    #The trajectory caluclated in order to avoid the sun will never exceed 8 points. If the trajectory exceeds 8 points
+    #  there has been an error in its calculation and it can't fit in the allocated memory
+    if traj_lenght > 8 or len(az_traj)!=len(alt_traj):
+        raise Exception("CRITICAL ERROR!\n"+
+                        "Error in calculating the trjectory to avoid the sun")
 
-    # if the system is disabled enable all axis
+    #writing the trajectory and its lenght on the TrioControllers
+    lb.Write_32_bit_floats(modbus_az, azdef.jog_traj_lenght, traj_lenght)
+    lb.Write_32_bit_floats(modbus_az, azdef.jog_traj, az_traj)
+    lb.Write_32_bit_floats(modbus_alt, altdef.jog_traj_lenght, traj_lenght)
+    lb.Write_32_bit_floats(modbus_alt, altdef.jog_traj, alt_traj)
+
+    #if the system is disabled enable all axis
     lb.Enable_Motion(modbus_az, "az", az_status, software_timeout)
     lb.Enable_Motion(modbus_alt, "alt", alt_status, software_timeout)
 
-    # starting the sequence that allows to write on TABLE memory
-    lb.Write_32_bit_floats(modbus_az, azdef.motion_command, azdef.usr_table_wr)
-    lb.Write_32_bit_floats(modbus_alt, altdef.motion_command, altdef.usr_table_wr)
-    # Waiting for the Trio-Controllers to have moved the modbus on 32-bit float Table memory
-    lb.Wait_until_coils(modbus_az, azdef.io_user_modbus_table, software_timeout)
-    lb.Wait_until_coils(modbus_alt, altdef.io_user_modbus_table, software_timeout)
-    # Writing parameters on table memory
-    lb.Write_32_bit_floats(modbus_az, addr_az, az_traj)
-    lb.Write_32_bit_floats(modbus_az, addr_alt, alt_traj)
-    lb.Write_32_bit_floats(modbus_alt, addr_az, az_traj)
-    lb.Write_32_bit_floats(modbus_alt, addr_alt, alt_traj)
-    # switching off Table memory on the Trio-Controller
-    modbus_az.write_single_coil(azdef.io_user_modbus_table, False)
-    modbus_alt.write_single_coil(altdef.io_user_modbus_table, False)
-    lb.Wait_until_register(modbus_az, azdef.system_status, azdef.ready, software_timeout)
-    lb.Wait_until_register(modbus_alt, altdef.system_status, altdef.ready, software_timeout)
-    # Launching the encoder monitor
-    # os.system("encoder_monitor.py") # da UTILIZZARE (per ora NON mi serve perchè sto lavorando su windows)
-    # da ELIMINARE (per ora mi serve perchè sto lavorando su windows)
-    #subprocess.run('start C:/Users/aless/OneDrive/Desktop/Borsa_INAF/LSPE_SWIPE/encoder_monitor.py', shell=True)
-    # time.sleep(1.5)#waiting for encoder monitor to start
-
-    # giving the comand to start the sequence
+    #giving the command to start the sequence
     lb.Write_32_bit_floats(modbus_az, azdef.motion_command, azdef.usr_move_avoid_sun)
     lb.Write_32_bit_floats(modbus_alt, altdef.motion_command, altdef.usr_move_avoid_sun)
 
+    #for the pointings in the list
     for i in range(1, traj_lenght):
+        #printing on terminal the motion needed by the two axis (only one axis move at a time)
         print("AZ: "+str(az_traj[i-1])+"-->"+str(az_traj[i]))
         print("ALT: " + str(alt_traj[i - 1]) + "-->" + str(alt_traj[i]))
 
-        if az_traj[i]!=az_traj[i-1]:
+        #if it is the turn of the azimuth azis to move
+        if az_traj[i]!=az_traj[i-1] and alt_traj[i]==alt_traj[i-1]:
+            #wait for azimuth axis to be idle and ready for motion
             lb.Wait_until_coils(modbus_az, azdef.io_user_azimuth_idle, motion_timeout)
+            #switch off the ide signal on azimuth controller
             modbus_az.write_single_coil(azdef.io_user_azimuth_idle, False)
+            #giving the signal to the alt controller has reached idle state
             modbus_alt.write_single_coil(altdef.in_user_azimuth_idle, True)
             print("AZ Moving!!!!")
-        elif alt_traj[i]!=alt_traj[i-1]:
+        elif alt_traj[i]!=alt_traj[i-1] and az_traj[i]==az_traj[i-1]:
             lb.Wait_until_coils(modbus_alt, altdef.io_user_elevation_idle, motion_timeout)
             modbus_alt.write_single_coil(altdef.io_user_elevation_idle, False)
             modbus_az.write_single_coil(azdef.in_user_elevation_idle, True)
             print("ALT Moving!!!!")
+        else:
+            raise Exception("CRITICAL ERROR:\n The trajectory calculated to avoid the sun is not valid!!")
+
 
 
 

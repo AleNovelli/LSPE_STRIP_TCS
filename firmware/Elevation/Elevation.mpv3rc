@@ -3,6 +3,7 @@
   <Content Name="Project">
     <Project>
       <Items>
+        <Item Type="basic" Name="AAA" />
         <Item Type="basic" Name="COMMON" />
         <Item Type="basic" Name="ENCODER_UPDATE" />
         <Item Type="basic" Name="MAIN" />
@@ -133,13 +134,13 @@
           <Property Name="Description" Value="raster_scan_accel_to_decel_frac" />
         </Item>
         <Item id="VR60">
-          <Property Name="Description" Value="calibration_table_start" />
+          <Property Name="Description" Value="num_of_points" />
         </Item>
         <Item id="VR61">
-          <Property Name="Description" Value="calibration_table_lenght" />
+          <Property Name="Description" Value="current_poinr" />
         </Item>
         <Item id="VR62">
-          <Property Name="Description" Value="calibration_target_pos" />
+          <Property Name="Description" Value="next_point_ready" />
         </Item>
         <Item id="VR70">
           <Property Name="Description" Value="avoid_sun_alt_table_start" />

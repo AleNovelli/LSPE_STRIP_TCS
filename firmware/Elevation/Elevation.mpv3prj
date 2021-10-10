@@ -7,6 +7,7 @@
         </Controller>
     </Environment>
     <Items>
+        <Item Type="basic" Name="AAA" FileName="AAA.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
         <Item Type="basic" Name="COMMON" FileName="COMMON.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
         <Item Type="basic" Name="ENCODER_UPDATE" FileName="ENCODER_UPDATE.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
         <Item Type="basic" Name="MAIN" FileName="MAIN.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />

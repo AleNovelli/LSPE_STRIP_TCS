@@ -14,6 +14,11 @@ import controller_definitions.elevation_definitions as altdef #importing the I/O
 from pyModbusTCP.client import ModbusClient #package to manage Modbus connections
 import library as lb
 import json
+import numpy as np
+
+from astropy.coordinates import EarthLocation, AltAz, get_sun
+from astropy.time import Time
+from astropy import units as u
 
 import os #da UTILIZZARE (per ora NON mi serve perchè sto lavorando su windows)
 import subprocess #<---da ELIMINARE (per ora mi serve perchè sto lavorando su windows)
@@ -25,17 +30,36 @@ az_port=driver_params["general"]["port_az_controller"]
 alt_ip=driver_params["general"]["ip_alt_controller"]
 alt_port=driver_params["general"]["port_alt_controller"]
 
+telescope_lon=driver_params["general"]["telescope_site_lon"]
+telescope_lat=driver_params["general"]["telescope_site_lat"]
+telescope_height=driver_params["general"]["telescope_height"]
+software_timeout=driver_params["general"]["software_timeout"]
+motion_timeout=driver_params["general"]["movement_timeout"]
+elongation=driver_params["general"]["elongation_from_sun"]
+
 alt=driver_params["nominal_survey"]["alt"]
 speed=driver_params["nominal_survey"]["speed"]
 duration=driver_params["nominal_survey"]["duration"]
-
-software_timeout=driver_params["general"]["software_timeout"]
-motion_timeout=driver_params["general"]["movement_timeout"]
+start_time=driver_params["nominal_survey"]["start_time"]
 
 modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False) #preparing modbus connection to Azimuth Controller
 modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False) #preparing modbus connection to Elevation Controller
 
 try:
+
+    print("Checking elongation from the sun...")
+    times = np.linspace(start_time, start_time + duration, 1000)
+    times = Time(times, format="unix")
+    observing_location = EarthLocation(lat=telescope_lat, lon=telescope_lon, height=telescope_height * u.m)
+    Location_Time = AltAz(location=observing_location, obstime=times)
+    sun_pos = get_sun(times).transform_to(Location_Time)
+    sun_collision = np.any((sun_pos.alt.deg >= alt - elongation)*
+                           (sun_pos.alt.deg <= alt + elongation))
+    if sun_collision:
+        raise Exception("CRITICAL ERROR:\n"+
+                        "The nominal scanning that you are loading would make the telescope point on the sun\n"+
+                        "SPIN SCAN ABORTED!")
+
     #connecting to the two controllers
     lb.Connect_to_Controller(modbus_az, "Azimuth")
     lb.Connect_to_Controller(modbus_alt, "Elevation")
