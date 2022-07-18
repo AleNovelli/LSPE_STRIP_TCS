@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Contents>
+  <Content Name="tool_ControllerTreeControl">
+    <Tool IsPeriodicUpdateEnabled="true" />
+  </Content>
+  <Content Name="Document_Program_MAIN" />
+  <Content Name="Document_Program_MONITOR" />
+  <Content Name="Document_Program_COMMON" />
+  <Content Name="tool_DigitalIOControl">
+    <Tool IsPeriodicUpdateEnabled="true" />
+  </Content>
+  <Content Name="tool_TableViewerControl">
+    <Tool IsPeriodicUpdateEnabled="true" ShowDescriptions="true">
+      <Ranges>
+        <Range StartAddress="0" EndAddress="100" IsExpanded="true" Description="" />
+        <Range StartAddress="100" EndAddress="500" IsExpanded="true" Description="" />
+      </Ranges>
+    </Tool>
+  </Content>
+  <Content Name="TableRangeEditDlgSettings">
+    <RecentRanges_TABLE>
+      <Range StartAddress="0" EndAddress="100" Description="" />
+      <Range StartAddress="100" EndAddress="500" Description="" />
+    </RecentRanges_TABLE>
+    <RecentRanges_VR>
+      <Range StartAddress="0" EndAddress="130" Description="" />
+      <Range StartAddress="500" EndAddress="539" Description="" />
+    </RecentRanges_VR>
+  </Content>
+  <Content Name="tool_VRViewerControl">
+    <Tool IsPeriodicUpdateEnabled="true">
+      <Ranges>
+        <Range StartAddress="0" EndAddress="130" IsExpanded="true" Description="" />
+      </Ranges>
+    </Tool>
+  </Content>
+  <Content Name="tool_FindReplaceWindow">
+    <Tool MainMode="QuickFind">
+      <Options MatchWholeWord="false" MatchCase="false" SearchUp="false" UseRegularExpressions="false">
+        <TargetItemTypes Mode="All" />
+      </Options>
+    </Tool>
+  </Content>
+  <Content Name="tool_OscilloscopeControl">
+    <Tool CurrentProfile="Profile 0">
+      <Config TriggerMode="Single" IsProgramTriggering="false" MaxChunkSize="8" TimePerDivision="20" ViewMode="Yt" DisplayTextInfo="false" IsExpanded="true" IsAutoHide="false" UseScopeDelay="false" ScopeDelay="0">
+        <ScopeTableInfo SamplesPerDivision="20" PointsPerDivision="10" FitToDisplay="false" IsAutoSamplesDataRangeStartAddress="true" SamplesDataRangeStartAddress="0" UseAutoReArm="true" Use_FIFO="false" FIFOName="MC_SCOPE_FIFO">
+          <BlockDataRanges>
+            <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+            <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+            <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+            <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+          </BlockDataRanges>
+        </ScopeTableInfo>
+      </Config>
+      <ViewerSettings>
+        <TraceColors Count="6" />
+        <CursorColors Count="4" />
+      </ViewerSettings>
+      <View3DSettings />
+      <TraceInfos>
+        <TraceInfo State="Automatic" ParamName="MSPEED" ContextIndex="0" NullableContextIndex="0" Range="0.5" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+        <TraceInfo State="Off" ParamName="MPOS" ContextIndex="0" NullableContextIndex="0" Range="0.0001" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+        <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+        <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+        <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+        <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+      </TraceInfos>
+      <CursorInfos>
+        <CursorInfo IsVisible="false" Position="0.2" TraceIndex="-1" />
+        <CursorInfo IsVisible="false" Position="0.4" TraceIndex="-1" />
+        <CursorInfo IsVisible="false" Position="0.6" TraceIndex="-1" />
+        <CursorInfo IsVisible="false" Position="0.8" TraceIndex="-1" />
+      </CursorInfos>
+      <RecentParamNames>
+        <Param Name="MPOS" Age="11" />
+        <Param Name="MSPEED" Age="0" />
+      </RecentParamNames>
+      <Profiles>
+        <Profile Name="Profile 0">
+          <Config TriggerMode="Single" IsProgramTriggering="false" MaxChunkSize="8" TimePerDivision="20" ViewMode="Yt" DisplayTextInfo="false" IsExpanded="true" IsAutoHide="false" UseScopeDelay="false" ScopeDelay="0">
+            <ScopeTableInfo SamplesPerDivision="20" PointsPerDivision="10" FitToDisplay="false" IsAutoSamplesDataRangeStartAddress="true" SamplesDataRangeStartAddress="0" UseAutoReArm="true" Use_FIFO="false" FIFOName="MC_SCOPE_FIFO">
+              <BlockDataRanges>
+                <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+                <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+                <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+                <ScopeTableDataRange StartAddress="0" EndAddress="-1" Step="1" />
+              </BlockDataRanges>
+            </ScopeTableInfo>
+          </Config>
+          <ViewerSettings>
+            <TraceColors Count="6" />
+            <CursorColors Count="4" />
+          </ViewerSettings>
+          <View3DSettings />
+          <TraceInfos>
+            <TraceInfo State="Automatic" ParamName="MSPEED" ContextIndex="0" NullableContextIndex="0" Range="0.5" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+            <TraceInfo State="Off" ParamName="MPOS" ContextIndex="0" NullableContextIndex="0" Range="0.0001" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+            <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+            <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+            <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+            <TraceInfo State="Off" ParamName="DPOS" ContextIndex="-1" NullableContextIndex="" Range="1" LockRanges="false" IsInDegrees="true" Offset="0" AutoCentre="false" />
+          </TraceInfos>
+          <CursorInfos>
+            <CursorInfo IsVisible="false" Position="0.2" TraceIndex="-1" />
+            <CursorInfo IsVisible="false" Position="0.4" TraceIndex="-1" />
+            <CursorInfo IsVisible="false" Position="0.6" TraceIndex="-1" />
+            <CursorInfo IsVisible="false" Position="0.8" TraceIndex="-1" />
+          </CursorInfos>
+          <RecentParamNames>
+            <Param Name="MPOS" Age="11" />
+            <Param Name="MSPEED" Age="0" />
+          </RecentParamNames>
+        </Profile>
+      </Profiles>
+    </Tool>
+  </Content>
+  <Content Name="tool_AxisParametersControl">
+    <Tool IsPeriodicUpdateEnabled="true" DisplayAs="0">
+      <AxesInUse>
+        <Index>0</Index>
+      </AxesInUse>
+    </Tool>
+  </Content>
+  <Content Name="tool_Visualization3DToolControl">
+    <Tool>
+      <ModelPath>C:\Program Files (x86)\TrioMotion\MotionPerfectV5.1\PlugIns\Visualization3D\Models\Gantry\Gantry.mprobo</ModelPath>
+      <Engine3D FillMode="Solid" ShowCS="true" ShowGrid="false">
+        <Camera3D Zoom="1" Perspective="false" Pivot="16.69909,-5.759879,18.96793" Orientation="-0.5791818,0.05873987,0.2512044,0.7733009" />
+      </Engine3D>
+      <JointMaps>
+        <JointMap ModelID="C:\Program Files (x86)\TrioMotion\MotionPerfectV5.1\PlugIns\Visualization3D\Models\Gantry\Gantry.mprobo">
+          <JointToAxisMap Axis="-1" ParamName="AXIS_DPOS" Offset="0" Scale="1" JointID="j0" />
+          <JointToAxisMap Axis="-1" ParamName="AXIS_DPOS" Offset="0" Scale="1" JointID="j1" />
+          <JointToAxisMap Axis="-1" ParamName="AXIS_DPOS" Offset="0" Scale="1" JointID="j2" />
+          <JointToAxisMap Axis="-1" ParamName="AXIS_DPOS" Offset="0" Scale="1" JointID="j3" />
+          <JointToAxisMap Axis="-1" ParamName="AXIS_DPOS" Offset="0" Scale="1" JointID="j4" />
+        </JointMap>
+      </JointMaps>
+      <StandardJointDisplay>
+        <StandardJointDisplay ShowLabels="false" ShowHierarchy="false" ShowPointers="false" ModelID="C:\Program Files (x86)\TrioMotion\MotionPerfectV5.1\PlugIns\Visualization3D\Models\Gantry\Gantry.mprobo">
+          <LabelUIParams JointID="j0" Pinned="false" PinX="0.27512126754086663" PinY="0.58288266886249451" FloatOffsetX="8" FloatOffsetY="8" />
+          <LabelUIParams JointID="j1" Pinned="false" PinX="0.44716432870152489" PinY="0.37962106765369646" FloatOffsetX="8" FloatOffsetY="8" />
+          <LabelUIParams JointID="j2" Pinned="false" PinX="0.51307040907771717" PinY="0.595884073749448" FloatOffsetX="8" FloatOffsetY="8" />
+          <LabelUIParams JointID="j3" Pinned="false" PinX="0.52687048241795309" PinY="0.70815333713491058" FloatOffsetX="8" FloatOffsetY="8" />
+          <LabelUIParams JointID="j4" Pinned="false" PinX="0.53415296929907141" PinY="0.76647587968266906" FloatOffsetX="8" FloatOffsetY="8" />
+        </StandardJointDisplay>
+      </StandardJointDisplay>
+    </Tool>
+  </Content>
+  <Content Name="Document_Program_STARTUP" />
+  <Content Name="Document_Program_STARTUP_DELAY" />
+  <Content Name="Document_Program_TEST" />
+  <Content Name="Document_MC_CONFIG_MC_CONFIG" />
+  <Content Name="Document_Program_ENCODER_UPDATE_OLD" />
+  <Content Name="Document_Program_ENCODER_UPDATE" />
+</Contents>
