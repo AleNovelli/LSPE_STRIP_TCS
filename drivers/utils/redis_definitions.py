@@ -1,0 +1,10 @@
+#REMOVED
+"""
+tcs_channel_base="tcs."
+channel_motion_commands="tcs.motion_command"
+channel_motion_answerback="tcs.motion_answerback"
+channel_stream_azimuth="tcs.encoder_az"
+channel_stream_elevation="tcs.encoder_alt"
+current_motion_var="tcs.current_motion"
+status="tcs.status"
+"""

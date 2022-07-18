@@ -1,0 +1,49 @@
+{
+  "ip&ports": {
+    "redis_ip": "localhost",
+    "redis_port": 6379,
+    "az_controller_ip": "127.0.0.1",
+    "alt_controller_ip": "127.0.0.1",
+    "az_controller_port": 502,
+    "alt_controller_port": 502,
+    "az_proxy_ip": "192.168.1.5",
+    "alt_proxy_ip": "192.168.1.4",
+    "az_proxy_port": 1502,
+    "alt_proxy_port": 1503
+  },
+  "telescope_site": {
+    "lon": 16.3081,
+    "lat": 28.4746,
+    "height": 100
+  },
+  "encoder_pos_at_zero_deg":{
+    "alt": 0,
+    "az": 0
+  },
+  "safety_parameters": {
+    "software_timeout": 5,
+    "movement_timeout": 100,
+    "max_alt": 85,
+    "min_alt": -90,
+    "max_speed": 6,
+    "elongation_from_sun": 9,
+    "parking_alt": 45,
+    "parking-az": 0
+  },
+  "redis_definitions": {
+    "base": "tcs.",
+    "channels": {
+      "fault_alert": "tcs.fault.alert",
+      "motion_commands": "tcs.motion.command",
+      "motion_answerbacks": "tcs.motion.answerback",
+      "az_encoder_stream": "tcs.encoder_az",
+      "alt_encoder_stream": "tcs.encoder_alt",
+      "fault_recovery_instructions": "tcs.fault.recov_instr"
+    },
+    "variables": {
+      "current_motion": "tcs.current_motion",
+      "status": "tcs.status",
+      "fault": "tcs.fault_status"
+    }
+  }
+}
