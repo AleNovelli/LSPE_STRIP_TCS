@@ -1,0 +1,60 @@
+'Due to slow AKD boot-up time
+AUTO_ETHERCAT = OFF
+
+'PC comm's setup
+IP_ADDRESS = 198.168.69.11
+
+IP_NETMASK = 255.255.255.0
+
+'Default servo period
+SERVO_PERIOD = 1000
+
+'Trio CANIO default settings
+CANIO_ADDRESS = 32
+
+'Controller I/O to start at address 0
+MODULEIO_BASE = 0
+
+'CAN I/O to start at address 16
+CANIO_BASE = 16
+
+'Drive I/O to start at address 32
+DRIVEIO_BASE = 32
+
+'Offset Axis 0 Drive EtherCAT I/O to start at address 32
+NODE_IO(0,0) = 32
+
+'Offset Axis 1 Drive EtherCAT I/O to start at address 40
+NODE_IO(0,1) = 40
+
+'Axis offset to allow slot 0 axis to be 0-7, encoder axis will be 31
+AXIS_OFFSET SLOT(-1) = 31
+
+AXIS_OFFSET SLOT(0) = 0
+
+'Axis 0=1 run axis as a servo in position control
+DRIVE_MODE AXIS(0) = 1
+
+'Axis 0=4 servo drive control with all drive I/O
+DRIVE_PROFILE AXIS(0) = 4
+
+'Axis 1=1 run axis as a servo in position control
+DRIVE_MODE AXIS(1) = 1
+
+'Axis 1=4 servo drive control with all drive I/O
+DRIVE_PROFILE AXIS(1) = 4
+
+'Axis 2=1 run axis as a servo in position control
+DRIVE_MODE AXIS(2) = 1
+
+'Axis 2=4 servo drive control with all drive I/O
+DRIVE_PROFILE AXIS(2) = 4
+
+'Axis 3=1 run axis as a servo in position control
+DRIVE_MODE AXIS(3) = 1
+
+'Axis 3=4 servo drive control with all drive I/O
+DRIVE_PROFILE AXIS(3) = 4
+
+'External incremental encoder as Axis 31
+ATYPE AXIS(31) = 76

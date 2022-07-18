@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Version="1" VersionMinor="1" ProductId="432" ProductName="MC4N ECAT">
+    <Environment>
+        <Software SoftwareVersion="5.2.1.25227" />
+        <Controller ControllerVersion="2.0288000000" ControllerFPGAVersion="10">
+            <Modules>
+                <Module ModuleId="39" FPGAVersion="10" />
+                <Module ModuleId="42" FPGAVersion="10" />
+            </Modules>
+        </Controller>
+    </Environment>
+    <Items>
+        <Item Type="basic" Name="COMMON" FileName="COMMON.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="basic" Name="ENCODER_UPDATE" FileName="ENCODER_UPDATE.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="basic" Name="ENCODER_UPDATE_NEW" FileName="ENCODER_UPDATE_NEW.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="basic" Name="MAIN" FileName="MAIN.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="mcConfig" Name="MC_CONFIG" FileName="MC_CONFIG.MCC" Storage="internalStorage" />
+        <Item Type="basic" Name="MONITOR" FileName="MONITOR.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="basic" Name="STARTUP" FileName="STARTUP.BAS" Storage="internalStorage" Autorun="0" IsAutorun="False" />
+        <Item Type="basic" Name="STARTUP_DELAY" FileName="STARTUP_DELAY.BAS" Storage="internalStorage" Autorun="0" IsAutorun="True" />
+    </Items>
+</Project>
