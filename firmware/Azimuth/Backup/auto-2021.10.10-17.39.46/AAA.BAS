@@ -1,6 +1,0 @@
-INCLUDE "COMMON"
-BASE(ax0)
-WHILE TRUE
-    VR(ax_mpos)=MPOS
-WEND
-

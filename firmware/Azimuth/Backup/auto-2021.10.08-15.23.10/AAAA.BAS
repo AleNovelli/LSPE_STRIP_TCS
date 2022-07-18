@@ -1,6 +1,0 @@
-WHILE TRUE
-    PRINT#6, TICKS
-    WA(1)
-    'PRINT#6, VR(30), VR(31), VR(32)
-WEND
-
