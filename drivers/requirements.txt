@@ -1,0 +1,5 @@
+astropy
+msgpack
+numpy
+pyModbusTCP==0.2.0
+redis
