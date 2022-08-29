@@ -73,4 +73,3 @@ try:
 
 except:
     lb.Disconnect_Controller(modbus_az, "Azimuth")
-    print(saved)

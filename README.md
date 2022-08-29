@@ -10,7 +10,10 @@ To install the code create a virtual envirnment running `python>=3.8`
 then append at the end of the `bin/activate` script the following code:
 ```
 MOTORS_PATH="/path/to/drivers/folder"
-if ! [[ "$PATH" =~ (^|:)$MOTORS_PATH(|/)(:|$) ]]; then
+if ! [[ "$PYTHONPATH" =~ (^|:)$MOTORS_PATH(|/)(:|$) ]]; then
     export PYTHONPATH=$PYTHONPATH:$MOTORS_PATH
+    echo drivers path added to PYTHONPATH
+else
+    echo drivers path already present in PYTHONPATH
 fi
 ```

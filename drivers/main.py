@@ -1,4 +1,3 @@
-
 import redis
 import msgpack
 import subprocess
@@ -7,8 +6,11 @@ import signal
 import time
 import json
 import traceback
+import argparse
 
-#from utils.redis_definitions import *
+parser=argparse.ArgumentParser(description="STRIP-TCS parameters")
+parser.add_argument("-s", "--simulator", action="store_true", help="Connect to Trio-Simulator instead of Trio-Controller")
+args=parser.parse_args()
 
 perm_processes = None
 perm_files_list=None
@@ -49,8 +51,9 @@ try:
     perm_files_list.sort(key=file_is_proxy, reverse=True)
 
     #Se sono collegato ai simulatori non devo gestire il proxy di elevazione
-    if simulator:
+    if args.simulator:
         perm_files_list.remove("proxy_alt.py")
+        perm_files_list.remove("proxy_az.py")
         #perm_files_list.remove("encoder_sampler_alt.py")
 
     #lancio i permanent process e salvo i loro subprocess in una lista
