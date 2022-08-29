@@ -111,10 +111,12 @@ try:
                     print("motion '" + command["motion"] + "' LAUNCHED")
                     cmd= "python "+motion_comands[command["motion"]]+" "+json.dumps(command["parameters"]).replace(" ", "")
                     print(cmd)
-                    motion_proc = subprocess.Popen(cmd.split(), cwd="./motion", shell=True) #Per Windows
+                    
+                    #Per Windows
+                    #motion_proc = subprocess.Popen(cmd.split(), cwd="./motion", shell=True) 
 
                     #Per LINUX
-                    #motion_proc = subprocess.Popen(cmd.split(), cwd="./motion", shell=True , preexec_fn=os.setsid)
+                    motion_proc = subprocess.Popen(cmd.split(), cwd="./motion")#, shell=True , preexec_fn=os.setsid)
                 else:
                     redis_client.publish(channel_motion_answerbacks,  "new motion '" + command["motion"] + "' FAILED")
                     redis_client.publish(channel_motion_answerbacks, "Running: "+ curr_motion)
@@ -123,11 +125,14 @@ try:
             elif message_channel==channel_fault_alert:
                 if motion_proc:
                     if motion_proc.poll()==None:
-                        #os.killpg(os.getpgid(pro.pid), signal.SIGTERM) <---- Per LINUX
+                    	 #Per LINUX
+                        #os.killpg(os.getpgid(pro.pid), signal.SIGTERM) 
+                        motion_proc.terminate()
+                        
                         #per Windows
+                        #kill=subprocess.Popen("TASKKILL /F /PID {pid} /T".format(pid=motion_proc.pid))
+                        #kill.wait()
                         print("PROCESS KILLEd")
-                        kill=subprocess.Popen("TASKKILL /F /PID {pid} /T".format(pid=motion_proc.pid))
-                        kill.wait()
 
 except redis.exceptions.ConnectionError:
     traceback.print_exc()

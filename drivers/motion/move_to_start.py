@@ -86,7 +86,7 @@ try:
     sun.az.wrap_at("180d", inplace=True)  # defining Az coordinate to be kept between (-180deg and 180deg)
 
     # UTILIZZATO PER I TEST, DA ELIMINARE DOPO
-    sun = np.array([[89, 35]])
+    sun = np.array([[-89, 35]])
     sun = SkyCoord(sun, unit="degree", frame='altaz')
     sun.az.wrap_at("180d", inplace=True)
 

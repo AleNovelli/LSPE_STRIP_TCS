@@ -205,10 +205,8 @@ def Connect_to_Controller(controller, name=""):
 #this function disconnects from the TrioController
 def Disconnect_Controller(controller, name=""):
     print("\nDisconnecting client ...")
-    if controller.close() == True:  # disconnecting Azimuth Trio-Controller
-        print(name+" Disconnected correctly !!!")
-    else:
-        print("Error in disconnecting "+name+" !!!")
+    controller.close()  # disconnecting Azimuth Trio-Controller
+    print(name+" Disconnected!!!")
 
 #<--------------------------------------------------------------------------->
 

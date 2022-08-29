@@ -53,6 +53,7 @@ redis_fault_alert_channel=driver_params["redis_definitions"]["channels"]["fault_
 current_motion_var=driver_params["redis_definitions"]["variables"]["current_motion"]
 
 #preparing modbus connection to Controllers
+print(alt_ip, alt_port)
 modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False)
 modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False)
 
