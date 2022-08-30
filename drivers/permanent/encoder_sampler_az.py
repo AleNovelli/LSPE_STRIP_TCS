@@ -22,6 +22,14 @@ import redis
 import msgpack
 #from utils.redis_definitions import *
 
+import logging
+log = logging.getLogger("encoder sampler alt")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
 az_ip=driver_params["ip&ports"]["az_proxy_ip"]
@@ -39,12 +47,15 @@ channel_stream_azimuth=driver_params["redis_definitions"]["channels"]["az_encode
 modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False)
 
 try:
+    log.info("Encoder Sampler AZ connecting...")
     # connect to the REDIS server
     client = redis.Redis(host=redis_ip, port=redis_port)
 
     #connecting to the Trio-Controller
     lb.Connect_to_Controller(modbus_az, "Azimuth")
-
+    
+    log.info("Encoder Sampler AZ launched")
+    
     # saving the time written on Controller memory on a temporary variable to check for time updates
     tmp = lb.Read_32_bit_floats(modbus_az, azdef.master_time_to_ws, 4)
 
@@ -71,5 +82,6 @@ try:
 
     lb.Disconnect_Controller(modbus_az, "Azimuth")
 
-except:
-    lb.Disconnect_Controller(modbus_az, "Azimuth")
+except Exception as e:
+	log.exception(e)
+	lb.Disconnect_Controller(modbus_az, "Azimuth")

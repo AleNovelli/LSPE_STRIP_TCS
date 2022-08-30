@@ -20,6 +20,14 @@ import msgpack
 import redis
 import sys
 
+import logging
+log = logging.getLogger("defpos_motion")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 param_file=open("../configuration/TCS_driver_parameters.json")
 driver_params=json.load(param_file)
 
@@ -52,6 +60,7 @@ az_enc=parameters["az_enc"]
 modbus_alt=None
 modbus_az=None
 try:
+	log.info("Executing pointing position redefinition")
     modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False) #preparing modbus connection to Azimuth Controller
     modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False) #preparing modbus connection to Elevation Controller
 
@@ -99,9 +108,11 @@ try:
     answerback = {'type': "answerback", 'from': "redefine_pos",
                   "answer": "success"}
     redis_client.publish(channel_motion_answerback, msgpack.packb(answerback))
+    log.info("Pointing position correctly redefined")
 
-except:
-    print("Error in redefining telescope position:", redis_answerback)
+except Exception as e:
+    log.critical("Error in redefining telescope position:", redis_answerback)
+    log.exception(e)
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
     answerback = {'type': "answerback", 'from': "redefine_pos",
                   "answer": redis_answerback}

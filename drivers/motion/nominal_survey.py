@@ -20,6 +20,14 @@ import msgpack
 import redis
 import sys
 
+import logging
+log = logging.getLogger("nominal_motion")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
 az_ip=driver_params["ip&ports"]["az_proxy_ip"]
@@ -57,6 +65,7 @@ duration=parameters["duration"]
 modbus_alt=None
 modbus_az=None
 try:
+    log.info("Nominal survey started")
     if alt>alt_max or alt<alt_min:
         redis_answerback="invalid parameters"
         raise Exception("Moving telescope outside of elevation safety range")
@@ -134,9 +143,11 @@ try:
     answerback = {'type': "answerback", 'from': "nominal",
                   "answer": "success"}
     redis_client.publish(channel_motion_answerback, msgpack.packb(answerback))
+    log.info("Nominal survey terminated")
 
-except:
-    print("Error in running nominal_survey motion:", redis_answerback)
+except Exception as e:
+    log.critical("Error in running nominal_survey motion:", redis_answerback)
+    log.exception(e)
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
     answerback = {'type': "answerback", 'from': "nominal",
                   "answer": redis_answerback}

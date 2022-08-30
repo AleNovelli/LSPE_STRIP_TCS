@@ -17,6 +17,14 @@ import numpy as np
 import time
 import msgpack
 
+import logging
+log = logging.getLogger("library")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 #<--------------------------------------------------------------------------->
 #These functions are used to write values on the memory of the Trio-Controllers (both VR and Table memory) using
 #the modbus protocol
@@ -193,20 +201,20 @@ def Read_Parameters(path):
 
 #this function tries to connect to a TrioController
 def Connect_to_Controller(controller, name=""):
-    print("Connecting to "+name+" Trio-Controller ...")
+    log.debug("Connecting to "+name+" Trio-Controller ...")
     if controller.open() == True:  # tring to open connection withcontroller
-        print("Connected successfully !!!")
+        log.debug(name+" Connected successfully !!!")
     else:
-        print("Client could not connect to the given IP/port !!!")
+        log.debug(name+" Client could not connect to the given IP/port !!!")
         exit()
 
 #<--------------------------------------------------------------------------->
 
 #this function disconnects from the TrioController
 def Disconnect_Controller(controller, name=""):
-    print("\nDisconnecting client ...")
+    log.debug("Disconnecting "+name+" client ...")
     controller.close()  # disconnecting Azimuth Trio-Controller
-    print(name+" Disconnected!!!")
+    log.debug(name+" Disconnected!!!")
 
 #<--------------------------------------------------------------------------->
 
@@ -238,7 +246,7 @@ def Enable_Motion(controller, alt_az, status, timeout):
     if alt_az == "az":
         # if the Azimuth Controller is disabled enable all axis
         if status == azdef.disabled:
-            print("Enabling Azimut Axis")
+            log.debug("Enabling Azimut Axis")
             if Read_32_bit_floats(controller, azdef.motion_command)[0] == azdef.disable_all:
                 Write_32_bit_floats(controller, azdef.motion_command, azdef.await_all)
                 time.sleep(.1)#waiting for the controllers to register the command changed from disable all
@@ -250,7 +258,7 @@ def Enable_Motion(controller, alt_az, status, timeout):
     elif alt_az == "alt":
         # if the Azimuth Controller is disabled enable all axis
         if status == altdef.disabled:
-            print("Enabling Elevation Axis")
+            log.debug("Enabling Elevation Axis")
             if Read_32_bit_floats(controller, altdef.motion_command)[0] == altdef.disable_all:
                 Write_32_bit_floats(controller, altdef.motion_command, altdef.await_all)
                 time.sleep(.1)  # waiting for the controllers to register the command changed from disable all
@@ -344,11 +352,11 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
     ver_rad = elongation
 
     if sun_az_min < sun_az_max:  # case in which the sun does not coincide with the Az periodic limit (180 to -180)
-        print(-1)
+        #print(-1)
         traj_az_in_sun = sun_az_min < traj.az < sun_az_max  # check if the starting point is in the Az range occupied by the sun
         obj_az_in_sun = sun_az_min < obj.az < sun_az_max  # check if the final point is in the Az range occupied by the sun
     else:  # case in which the sun coincides with the Az periodic limit (180 to -180)
-        print(-2)
+        #print(-2)
         traj_az_in_sun = not sun_az_max < traj.az < sun_az_min  # check if the starting point is in the Az range occupied by the sun
         obj_az_in_sun = not sun_az_max < obj.az < sun_az_min  # check if the final point is in the Az range occupied by the sun
 
@@ -356,13 +364,13 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
     obj_alt_in_sun = sun_alt_min < obj.alt < sun_alt_max  # check if the final point is in the Alt range occupied by the sun
 
     if traj_az_in_sun and traj_alt_in_sun:  # if telescope is close to the sun program a move to move it away
-        print(1)
+        #print(1)
         traj = move(traj, 1.2*np.sign((traj[-1].az - sun.az).wrap_at("180d")) * (
                     hor_rad - abs((traj[-1].az - sun.az).wrap_at("180d"))), Angle(0, unit="deg"))
         traj_az_in_sun = False  # I moved the telescope outside the sun Az range
 
     if obj_az_in_sun and obj_alt_in_sun:  # if final pos is close to the sun program a move to get close safely
-        print(2)
+        #print(2)
         obj = move(obj, 1.2*np.sign((obj[0].az - sun.az).wrap_at("180d")) * (
                     hor_rad - abs((obj[0].az - sun.az).wrap_at("180d"))), Angle(0, unit="deg"), reverse=True)
         obj_az_in_sun = False  # I moved the objective outside the sun Az range
@@ -374,7 +382,7 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
     sun_in_the_way = min(0, traj_to_obj) - hor_rad < traj_to_sun < max(0, traj_to_obj) + hor_rad
 
     if not sun_in_the_way:
-        print(3)  # if the sun is not in the way move straight to the objective
+        #print(3)  # if the sun is not in the way move straight to the objective
         if traj[-1].az != obj[0].az:
             traj = moveabs(traj, obj[0].az, traj[-1].alt)
         if traj[-1].alt != obj[0].alt:
@@ -382,32 +390,32 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
     elif traj_az_in_sun and obj_az_in_sun:
         if abs((traj[-1].az - obj[0].az) / 2 + obj[0].az - sun_az_min) >= abs(
                 (traj[-1].az - obj[0].az) / 2 + obj[0].az - sun_az_max):
-            print(4.1)
+            #print(4.1)
 
             traj = moveabs(traj, sun_az_max, traj[-1].alt)
             traj = moveabs(traj, traj[-1].az, obj[0].alt)
             traj = moveabs(traj, obj[0].az, traj[-1].alt)
         else:
-            print(4.2)
+            #print(4.2)
             traj = moveabs(traj, sun_az_min, traj[-1].alt)
             traj = moveabs(traj, traj[-1].az, obj[0].alt)
             traj = moveabs(traj, obj[0].az, traj[-1].alt)
     elif not traj_alt_in_sun:
-        print(5)
+        #print(5)
         traj = moveabs(traj, obj[0].az, traj[-1].alt)
         traj = moveabs(traj, traj[-1].az, obj[0].alt)
     elif not obj_alt_in_sun:
-        print(6)
+        #print(6)
         traj = moveabs(traj, traj[-1].az, obj[0].alt)
         traj = moveabs(traj, obj[0].az, traj[-1].alt)
     else:
         if sun.alt.deg > (alt_max - alt_min) / 2 + alt_min:
-            print(7)
+            #print(7)
             traj = moveabs(traj, traj[-1].az, sun_alt_min)
             traj = moveabs(traj, obj[0].az, traj[-1].alt)
             traj = moveabs(traj, traj[-1].az, obj[0].alt)
         else:
-            print(8)
+            #print(8)
             traj = moveabs(traj, traj[-1].az, sun_alt_max)
             traj = moveabs(traj, obj[0].az, traj[-1].alt)
             traj = moveabs(traj, traj[-1].az, obj[0].alt)
@@ -419,7 +427,7 @@ def Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min):
         full_traj = traj
     full_traj.az.wrap_at("180d", inplace=True)
 
-    print(full_traj.az.deg, full_traj.alt.deg)
+    log.debug("Trajectory calculated: az "+str(full_traj.az.deg)+" alt"+str(full_traj.alt.deg))
 
     az_traj = full_traj.az.deg.tolist()  # converting the trajectory from numpy strings to list of floats
     alt_traj = full_traj.alt.deg.tolist()
@@ -512,11 +520,9 @@ def Fault_recovery(modbus_az, modbus_alt, alt_fault, az_fault, redis_client, red
         az_recovered = True
 
     elif az_fault == azdef.master_clock:
-        print("STUCK HERE")
         redis_client.publish(redis_recovery_channel,
                              msgpack.packb("Az axis lost connection to the master clock\nRestore the connection and press START.py"))
         Wait_until_coils(modbus_az, azdef.in_start_button, 24 * 3600, period=.1)
-        print("Solved")
         az_recovered = True
 
     elif az_fault == azdef.basic_error:
@@ -681,7 +687,7 @@ def Sun_recovery(modbus_az, modbus_alt):
     finish.az.wrap_at("180d", inplace=True)
 
     if start.separation(finish).deg < 1 / 3600:
-        print("The telescope is already positioned correctly with a precision higher than 1 arcsec")
+        log.debug("The telescope is already positioned correctly with a precision higher than 1 arcsec")
     else:
         az_traj, alt_traj = Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min)
 

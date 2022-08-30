@@ -21,6 +21,13 @@ import json
 import msgpack
 import redis
 
+import logging
+log = logging.getLogger("encoder sampler alt")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
 
 #from utils.redis_definitions import *
 
@@ -40,12 +47,15 @@ channel_stream_elevation=driver_params["redis_definitions"]["channels"]["alt_enc
 modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False)
 
 try:
+    log.info("Encoder Sampler ALT connecting...")
     # connect to the REDIS server
     client = redis.Redis(host=redis_ip, port=redis_port)
 
     #connecting to the Trio-Controller
     lb.Connect_to_Controller(modbus_alt, "Elevation")
-
+    
+    log.info("Encoder Sampler ALT launched")
+    
     # saving the time written on Controller memory on a temporary variable to check for time updates
     tmp = lb.Read_32_bit_floats(modbus_alt, altdef.master_time_to_ws, 3)
 
@@ -65,5 +75,6 @@ try:
 
     lb.Disconnect_Controller(modbus_alt, "Elevation")
 
-except:
-    lb.Disconnect_Controller(modbus_alt, "Elevation")
+except Exception as e:
+	log.exception(e)
+	lb.Disconnect_Controller(modbus_alt, "Elevation")
