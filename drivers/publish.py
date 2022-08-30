@@ -4,7 +4,7 @@ import msgpack
 #answerback = {'type':"answerback", 'outcome':True, output=""}
 
 move_to = {'type':"command", 'motion':"move to",
-        "parameters":{"alt":45,"az":92}}
+        "parameters":{"alt":46,"az":92}}
 
 calibration = {'type':"command", 'motion':"calibration",
         "parameters":{"pointing_list":[[80.0, 120, 10], [60.0, 100, 20]]}}
@@ -17,7 +17,7 @@ raster = {'type':"command", 'motion':"raster",
 
 
 
-motion=move_to
+motion=nominal
 print(msgpack.packb(motion))
 
 

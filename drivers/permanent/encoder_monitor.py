@@ -28,8 +28,12 @@ from astropy import units as u
 from datetime import datetime
 
 import logging
-log = logging.getLogger("strip_motors_log")
+log = logging.getLogger("safety monitor")
 log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
 
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
@@ -152,6 +156,7 @@ try:
     lb.Disconnect_Controller(modbus_alt, "Elevation")
     lb.Disconnect_Controller(modbus_az, "Azimuth")
 
-except KeyboardInterrupt:
-    lb.Disconnect_Controller(modbus_alt, "Elevation")
-    lb.Disconnect_Controller(modbus_az, "Azimuth")
+except Exception as e:
+	log.exception(e)
+	lb.Disconnect_Controller(modbus_alt, "Elevation")
+	lb.Disconnect_Controller(modbus_az, "Azimuth")

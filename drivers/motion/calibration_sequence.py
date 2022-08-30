@@ -30,6 +30,14 @@ import msgpack
 import redis
 import sys
 
+import logging
+log = logging.getLogger("calibration_motion")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
 az_ip=driver_params["ip&ports"]["az_proxy_ip"]
@@ -65,6 +73,7 @@ params=parameters["pointing_list"]
 modbus_alt=None
 modbus_az=None
 try:
+	log.info("Calibration sequence starting")
     if np.any(np.array(params).T[0]>alt_max) or np.any(np.array(params).T[0]<alt_min):
         redis_answerback="invalid parameters"
         raise Exception("Moving telescope outside of elevation safety range")
@@ -95,7 +104,7 @@ try:
     lb.Enable_Motion(modbus_alt, "alt", alt_status, software_timeout)
 
     for j, position in enumerate(params):
-        print("Point", j, position)
+        log.debug("Reaching position {:d}: alt {:f}, az {:f}, duration {:f}".format(j, position[0], position[1],position[2]))
         #a=input("---")
         final_alt, final_az, duration = position
 
@@ -125,7 +134,7 @@ try:
         #az = lb.Read_32_bit_floats(modbus_az, azdef.ax_mpos)[0]
 
 
-        print(alt,az)
+        log.debug("Starting position: alt {:d}, az{:d}".format(alt, az))
         #input("---")
         start = np.array([[az, alt]])
         start = SkyCoord(start, unit="degree", frame='altaz')
@@ -146,7 +155,7 @@ try:
             raise Exception("CRITICAL ERROR!\n" +
                             "Error in calculating the trjectory to avoid the sun")
         elif traj_lenght==1:
-            print("The telescope is already in position!!!")
+            log.debug("The telescope is already in position!!!")
             lb.Disconnect_Controller(modbus_az, "Azimuth")
             lb.Disconnect_Controller(modbus_alt, "Elevation")
             exit()
@@ -173,8 +182,8 @@ try:
         #mediating the communications between the controllers during the jog
         for i in range(1, traj_lenght):
             # printing on terminal the motion needed by the two axis (only one axis move at a time)
-            print("AZ: " + str(az_traj[i - 1]) + "-->" + str(az_traj[i]))
-            print("ALT: " + str(alt_traj[i - 1]) + "-->" + str(alt_traj[i]))
+            log.debug("moving AZ: " + str(az_traj[i - 1]) + "-->" + str(az_traj[i]))
+            log.debug("moving ALT: " + str(alt_traj[i - 1]) + "-->" + str(alt_traj[i]))
 
             # if it is the turn of the azimuth azis to move
             if az_traj[i]!=az_traj[i-1] and alt_traj[i]==alt_traj[i-1]:
@@ -185,12 +194,12 @@ try:
                 modbus_az.write_single_coil(azdef.io_user_azimuth_idle, False)
                 # giving the signal to the alt controller has reached idle state
                 modbus_alt.write_single_coil(altdef.in_user_azimuth_idle, True)
-                print("AZ Moving!!!!")
+                log.debug("AZ Moving!!!!")
             elif alt_traj[i] != alt_traj[i - 1] and az_traj[i] == az_traj[i - 1]:
                 lb.Wait_until_coils(modbus_alt, altdef.io_user_elevation_idle, motion_timeout)
                 modbus_alt.write_single_coil(altdef.io_user_elevation_idle, False)
                 modbus_az.write_single_coil(azdef.in_user_elevation_idle, True)
-                print("ALT Moving!!!!")
+                log.debug("ALT Moving!!!!")
             else:
                 raise Exception("CRITICAL ERROR:\n The trajectory calculated to avoid the sun is not valid!!")
 
@@ -199,7 +208,7 @@ try:
         lb.Wait_until_register(modbus_az, azdef.current_point, j, motion_timeout)
         lb.Wait_until_register(modbus_alt, altdef.current_point, j, motion_timeout)
 
-        print("Waiting: ", duration)
+        log.debug("Waiting: {:d} seconds".format(duration))
         #waiting the specified time
         time.sleep(duration)
 
@@ -211,9 +220,11 @@ try:
     answerback = {'type': "answerback", 'from': "calibration",
                   "answer": "success"}
     redis_client.publish(channel_motion_answerback, msgpack.packb(answerback))
+    log.info("Calibration sequence terminated")
 
-except:
-    print("Error in running calibration motion:", redis_answerback)
+except Exception as e:
+    log.critical("Error in running calibration motion:", redis_answerback)
+    log.exception(e)
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
     answerback = {'type': "answerback", 'from': "calibration",
                   "answer": redis_answerback}

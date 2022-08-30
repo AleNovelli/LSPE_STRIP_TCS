@@ -39,7 +39,7 @@ try:
         conn_on = conn_on and modbus_az.write_single_coil(azdef.in_user_tos, True)
         conn_on = conn_on and modbus_alt.write_single_coil(altdef.in_user_tos, True)
         #t_=timeit.timeit(lambda: "client.write_single_coil(3, True)")
-        print(time.time()-t0)
+        #print(time.time()-t0)
         time.sleep(.25)
         conn_on = conn_on and modbus_az.write_single_coil(azdef.in_user_tos, False)
         conn_on = conn_on and modbus_alt.write_single_coil(altdef.in_user_tos, False)

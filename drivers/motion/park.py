@@ -30,6 +30,14 @@ import redis
 
 #from utils.redis_definitions import *
 
+import logging
+log = logging.getLogger("park_motion")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(filename)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
+
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
 az_ip=driver_params["ip&ports"]["az_proxy_ip"]
@@ -61,6 +69,7 @@ az=driver_params["safety_parameters"]["parking_az"]
 modbus_alt=None
 modbus_az=None
 try:
+	log.info("Parking sequence started")
     if alt>alt_max or alt<alt_min:
         redis_answerback="invalid parameters"
         raise Exception("Moving telescope outside of elevation safety range")
@@ -118,7 +127,7 @@ try:
     #start = SkyCoord(start, unit="degree", frame='altaz')
     #start.az.wrap_at("180d", inplace=True)
     if start.separation(finish).deg<1/36000:
-        print("The telescope is already positioned correctly with a precision higher than 1/10 arcsec")
+        log.debug("The telescope is already positioned correctly with a precision higher than 1/10 arcsec")
     else:
         az_traj, alt_traj = lb.Traj_to_Pos(sun, start, finish, elongation, alt_max, alt_min)
 
@@ -175,9 +184,11 @@ try:
     answerback = {'type': "answerback", 'from': "park",
             "answer":"success"}
     redis_client.publish(channel_motion_answerback, msgpack.packb(answerback))
+    log.info("Parking sequence terminated")
 
-except Exception:
-    print("Error in running move_to_start motion:", redis_answerback)
+except Exception as e:
+    log.critical("Error in running parking motion:", redis_answerback)
+    log.excaption(e)
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
     answerback = {'type': "answerback", 'from': "park",
                   "answer": redis_answerback}
