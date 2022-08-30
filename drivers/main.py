@@ -7,10 +7,19 @@ import time
 import json
 import traceback
 import argparse
+import logging
 
 parser=argparse.ArgumentParser(description="STRIP-TCS parameters")
 parser.add_argument("-s", "--simulator", action="store_true", help="Connect to Trio-Simulator instead of Trio-Controller")
 args=parser.parse_args()
+
+
+log = logging.getLogger("strip_motors_log")
+log.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+log.addHandler(stream_handler)
 
 perm_processes = None
 perm_files_list=None
@@ -28,13 +37,11 @@ channel_fault_alert=driver_params["redis_definitions"]["channels"]["fault_alert"
 
 
 try:
+    log.info("Connecting to Redis server at: {:s}:{:d}".format(redis_ip, redis_port))
     #connect to the REDIS server
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
     pub_sub=redis_client.pubsub()
     pub_sub.psubscribe(tcs_channel_base+"*")
-
-    #indicates that we are connected to the simulators and not to the real Controllers
-    simulator=False
 
     # get a list of all the files that must be running permanently
     perm_files_list=os.listdir("./permanent")
@@ -42,7 +49,8 @@ try:
 
     # function to determine if a file is a modbus proxy
     def file_is_proxy(file_name):
-        if "proxy" in file_name:
+        #if "proxy" in file_name:
+        if "monitor" in file_name:
             return 1
         else:
             return 0
@@ -56,6 +64,7 @@ try:
         perm_files_list.remove("proxy_az.py")
         #perm_files_list.remove("encoder_sampler_alt.py")
 
+    log.info("Launching critical subprocesses")
     #lancio i permanent process e salvo i loro subprocess in una lista
     perm_processes=[]
     for file in perm_files_list:
@@ -66,7 +75,8 @@ try:
 
     #se sono collegato ai simulatori lancio il simulatore del master clock e
     # resetto il fault dovuto al fatto che non ero collegato al master clock
-    if simulator==True:
+    if args.simulator:
+        log.info("Launching master clock simulator")
         cmd="python master_clock_sim.py"
         #mc_proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, cwd="./utils")
         #time.sleep(3)
@@ -85,7 +95,7 @@ try:
 
     redis_client.set(current_motion_var, "none")
     motion_proc=None
-    print("Connection to TCS made, ready to accept comands.")
+    log.info("Connection to TCS made, ready to accept comands.")
 
     while True:
 
@@ -135,8 +145,8 @@ try:
                         print("PROCESS KILLEd")
 
 except redis.exceptions.ConnectionError:
-    traceback.print_exc()
-    print("\nERROR:\nFailing to connect to the Redis server:\nAttempting connection to '{}:{:d}'".format(redis_ip, redis_port))
+    #traceback.print_exc()
+    log.critical("Failing to connect to the Redis server at: {}:{:d}".format(redis_ip, redis_port))
 except Exception as exception:
     print("\nGENERAL ERROR:")
     #if the list with all the permanent processes has already been defined

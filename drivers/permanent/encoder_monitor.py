@@ -27,6 +27,10 @@ from astropy.time import Time
 from astropy import units as u
 from datetime import datetime
 
+import logging
+log = logging.getLogger("strip_motors_log")
+log.setLevel(logging.INFO)
+
 driver_params=json.load(open("../configuration/TCS_driver_parameters.json"))
 
 az_ip=driver_params["ip&ports"]["az_proxy_ip"]
@@ -53,12 +57,12 @@ redis_fault_alert_channel=driver_params["redis_definitions"]["channels"]["fault_
 current_motion_var=driver_params["redis_definitions"]["variables"]["current_motion"]
 
 #preparing modbus connection to Controllers
-print(alt_ip, alt_port)
 modbus_alt = ModbusClient(host=alt_ip, port=alt_port, debug=False)
 modbus_az = ModbusClient(host=az_ip, port=az_port, debug=False)
 
 
 try:
+    log.info("Encoder Monitor connecting...")
     #connecting to the Redis server
     redis_client = redis.Redis(host=redis_ip, port=redis_port)
 
@@ -66,7 +70,8 @@ try:
     lb.Connect_to_Controller(modbus_alt, "Elevation")
     lb.Connect_to_Controller(modbus_az, "Azimuth")
     observing_location = EarthLocation(lat=telescope_lat, lon=telescope_lon, height=telescope_height * u.m)
-
+    
+    log.info("Encoder Monitor launched")
     # while the Controller is running
     while True:
 
